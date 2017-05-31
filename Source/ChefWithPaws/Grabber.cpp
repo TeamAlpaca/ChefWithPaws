@@ -9,6 +9,7 @@ UGrabber::UGrabber()
 
 	PrimaryComponentTick.bCanEverTick = true; //true就每帧都调用
 	OtherActor = nullptr;
+	Grabbed = false;
 }
 
 
@@ -18,8 +19,7 @@ void UGrabber::SetupInputComponent()
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 	if (InputComponent)
 	{                                                       //↓输入时调用grab
-		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::GrabOrRelease);
 	}
 	else
 	{
@@ -51,6 +51,12 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		PhysicsHandle->SetTargetLocation(GetReachLineEnd());
 	}
 }
+void UGrabber::GrabOrRelease()
+{
+	if (Grabbed) { Release(); }
+	else { Grab(); }
+}
+
 void UGrabber::Grab()
 {
 	TArray<UMeshComponent*> Components;
@@ -68,11 +74,13 @@ void UGrabber::Grab()
 		ComponentToGrab->GetOwner()->GetActorLocation(),
 		true // allow rotation
 	);
+	Grabbed = true;
 }
 void UGrabber::Release()
 {
 	if (!PhysicsHandle) { return; }
 	PhysicsHandle->ReleaseComponent();
+	Grabbed = false;
 }
 FVector UGrabber::GetReachLineEnd()
 {
@@ -86,7 +94,7 @@ void UGrabber::OnOverlapBegin(AActor * Self, AActor * Target)
 {
 	OtherActor = Target;
 	FindPhysicsHandleComponent();
-	SetupInputComponent();
+	SetupInputComponent();	
 }
 
 void UGrabber::OnOverlapEnd()

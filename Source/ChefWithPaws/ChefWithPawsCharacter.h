@@ -35,7 +35,7 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
-
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	//ÖØµþ´¥·¢Æ÷
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Trigger)

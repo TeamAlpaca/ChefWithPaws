@@ -39,10 +39,10 @@ public:
 	void SetupInputComponent();
 	void FindPhysicsHandleComponent();
 	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction);
+	void GrabOrRelease();
 	void Grab();
-
-	// Called when grab is released Õ∑≈
 	void Release();
 	FVector GetReachLineEnd();
 	FVector Direction;
+	bool Grabbed;
 };
