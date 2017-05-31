@@ -2,12 +2,13 @@
 
 #pragma once
 
+
 #include "Components/BoxComponent.h"
 #include "Grabber.generated.h"
 
 /**
- * 
- */
+*
+*/
 UCLASS()
 class CHEFWITHPAWS_API UGrabber : public UBoxComponent
 {
@@ -15,31 +16,33 @@ class CHEFWITHPAWS_API UGrabber : public UBoxComponent
 
 public:
 	// Sets default values for this component's properties
-	 UGrabber();
+	UGrabber();
 	// Called when the game starts
 
 	AActor* OtherActor;
-public:
+
 	/** 当某对象进入box组件时调用 */
 	UFUNCTION()
-   void OnOverlapBegin(AActor * Self, AActor* Target);
+
+		void OnOverlapBegin(AActor * Self, AActor* Target);
 
 	/** 当某对象离开box组件时调用 */
 	UFUNCTION()
-		 void OnOverlapEnd();
+		void OnOverlapEnd();
 
 	//组件成员们
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
 
 	// Setup (assumed) attached input component安装输入组件
- void SetupInputComponent();
+	void SetupInputComponent();
+	void FindPhysicsHandleComponent();
 	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction);
+	void GrabOrRelease();
 	void Grab();
-
-	// Called when grab is released释放
 	void Release();
 	FVector GetReachLineEnd();
-	void SetLocation();
+	FVector Direction;
 	bool Grabbed;
 };
