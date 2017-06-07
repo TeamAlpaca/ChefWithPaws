@@ -3,16 +3,16 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "FoodBucket.generated.h"
+#include "Camera.generated.h"
 
 UCLASS()
-class CHEFWITHPAWS_API AFoodBucket : public AActor
+class CHEFWITHPAWS_API ACamera : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AFoodBucket();
+	ACamera();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,10 +22,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Bucket)
-	UStaticMeshComponent* BucketMesh;
-   
-	void ApawnActor();
-	
+	UPROPERTY(EditAnywhere)
+		AActor* CameraOne;
+
 	
 };
