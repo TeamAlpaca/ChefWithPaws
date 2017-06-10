@@ -6,7 +6,7 @@ public class ChefWithPaws : ModuleRules
 {
 	public ChefWithPaws(TargetInfo Target)
 	{
-
+   
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "UMG" });
         PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
     }
