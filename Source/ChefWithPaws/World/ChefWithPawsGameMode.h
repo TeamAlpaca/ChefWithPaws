@@ -4,6 +4,15 @@
 #include "GameFramework/GameModeBase.h"
 #include "ChefWithPawsGameMode.generated.h"
 
+UENUM(BlueprintType)
+enum class ENomalGameplayState :uint8
+{
+	EWaiting UMETA(DisplayName = "Waiting"),
+	EPlaying UMETA(DisplayName = "Playing"),
+	EPause UMETA(DisplayName = "Pause"),
+	EFinish UMETA(DisplayName = "Finish"),
+};
+
 UCLASS(minimalapi)
 class AChefWithPawsGameMode : public AGameModeBase
 {
@@ -27,9 +36,6 @@ public:
 	void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
 	UFUNCTION(BlueprintPure, Category = "Coin")
-		int32 GetCoin()const;
-
-	UFUNCTION(BlueprintPure, Category = "Coin")
 		int32 GetCountdownTime()const;
 
 
@@ -46,16 +52,36 @@ protected:
 UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Coin", Meta = (BlueprintProtected = "true"))
 		int32 CountdownTime;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Coin", Meta = (BlueprintProtected = "true"))
-		int32 Coin;
-
-	UPROPERTY(EditAnywhere)
-		int32 ReadinessTime;
-	FTimerHandle ReadinessTimerHandle;
-
 	FTimerHandle CountdownTimerHandle;
 
+private:
+	ENomalGameplayState GameplayState;
 
+public:
+
+	ENomalGameplayState GetGameplayState()const;
+
+	void SetGameplayState(ENomalGameplayState NewState);
+
+	UFUNCTION(BlueprintCallable, Category = "Game State")
+		bool IsWaiting();
+	UFUNCTION(BlueprintCallable, Category = "Game State")
+		bool IsPlaying();
+
+
+	UFUNCTION(BlueprintPure, Category = "Coin")
+		int32 GetCoin()const;
+
+	UFUNCTION(BlueprintCallable, Category = "Coin")
+		void AddCoin(int32 Number);
+
+	UFUNCTION(BlueprintCallable, Category = "Coin")
+		void MinusCoin(int32 Number);
+
+	class AOrderList* OrderList;
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Coin", Meta = (BlueprintProtected = "true"))
+		int32 Coin;
 };
 
 

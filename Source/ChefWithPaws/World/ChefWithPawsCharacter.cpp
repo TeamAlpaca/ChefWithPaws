@@ -56,15 +56,18 @@ void AChefWithPawsCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 {
 	// Set up gameplay key bindings
 	InputComponent = PlayerInputComponent;
-
-}
-void AChefWithPawsCharacter::SetupPlayerInputComponentNow()
-{
-
 	check(InputComponent);
 	UE_LOG(LogGameMode, Warning, TEXT("SetupPlayerInputComponentNow"));
 	InputComponent->BindAxis("MoveForward", this, &AChefWithPawsCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AChefWithPawsCharacter::MoveRight);
+
+}
+void AChefWithPawsCharacter::SetupPlayerInputComponentNow()
+{
+	/*check(InputComponent);
+
+	InputComponent->BindAxis("MoveForward", this, &AChefWithPawsCharacter::MoveForward);
+	InputComponent->BindAxis("MoveRight", this, &AChefWithPawsCharacter::MoveRight);*/
 }
 
 void AChefWithPawsCharacter::MoveForward(float Value)

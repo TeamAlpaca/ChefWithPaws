@@ -9,8 +9,8 @@ UCLASS()
 class CHEFWITHPAWS_API ACamera : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ACamera();
 
@@ -18,12 +18,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
 		AActor* CameraOne;
 
-	
+
 };
