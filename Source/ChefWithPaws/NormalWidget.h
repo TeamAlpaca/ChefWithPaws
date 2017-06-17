@@ -27,5 +27,6 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "HUD")
 		void Stop();
-	
+	UFUNCTION(BlueprintImplementableEvent, Category = "HUD")
+		void Error();
 };

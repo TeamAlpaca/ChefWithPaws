@@ -2,28 +2,29 @@
 
 #pragma once
 
-#include "GameFramework/GameState.h"
+#include "GameFramework/GameStateBase.h"
 #include "Order.h"
+
 #include "OrderList.generated.h"
 
 /**
  * 
  */
-
 UCLASS()
-class CHEFWITHPAWS_API AOrderList : public AGameState
+class CHEFWITHPAWS_API AOrderList : public AGameStateBase
 {
 	GENERATED_BODY()
+
 protected:
 	TArray<AOrder*> List;
-	
+
 public:
 	int32 Finished;
 	int32 Missed;
 	void StartGameplayStateMachine();
 
 	UFUNCTION(BlueprintPure, Category = "CountdownTime")
-    int32 GetCountdownTime(int32 i);
+		int32 GetCountdownTime(int32 i);
 	UFUNCTION(BlueprintPure, Category = "Order")
 		int32 GetFinished();
 	UFUNCTION(BlueprintPure, Category = "Order")
@@ -31,5 +32,5 @@ public:
 	void CreateNewOrder();
 	void Stop();
 	void CheckFood(FString ID);
-
+	
 };

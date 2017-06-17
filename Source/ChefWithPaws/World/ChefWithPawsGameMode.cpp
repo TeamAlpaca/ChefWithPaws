@@ -20,18 +20,17 @@ AChefWithPawsGameMode::AChefWithPawsGameMode()
 	
 }
 
-
-void AChefWithPawsGameMode::InitGameState()
+void  AChefWithPawsGameMode::BeginPlay()
 {
-	Super::InitGameState();
+	Super::BeginPlay();
 	UE_LOG(LogTemp, Error, TEXT("InitGameState"));
 	ChangeMenuWidget(StartingWidgetClass);
-
-AOrderList* MyGameState=Cast<AOrderList>(GetWorld()->GetGameState());
-	check(MyGameState);
-	MyGameState->StartGameplayStateMachine();
-	
+	AOrderList* OrderList = Cast<AOrderList>(GetWorld()->GetGameState());
+	check(OrderList);
+	OrderList->StartGameplayStateMachine();
+	SetGameplayState(ENomalGameplayState::EWaiting);
 }
+
 int32 AChefWithPawsGameMode::GetCountdownTime() const
 {
 	return CountdownTime;
@@ -47,7 +46,6 @@ void AChefWithPawsGameMode::StartNow()
 	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &AChefWithPawsGameMode::AdvanceTimer, 1.0f, true);
 	SetGameplayState(ENomalGameplayState::EPlaying);
 
-	GameplayState = ENomalGameplayState::EWaiting;
 	Coin = 0;
 }
 
@@ -68,9 +66,9 @@ void AChefWithPawsGameMode::AdvanceTimer()
 	}
 	if (CountdownTime%5==0)
 	{
-		AOrderList* MyGameState = Cast<AOrderList>(GetWorld()->GetGameState());
-		check(MyGameState);
-		MyGameState->CreateNewOrder();
+		AOrderList* OrderList = Cast<AOrderList>(GetWorld()->GetGameState());
+		check(OrderList);
+		OrderList->CreateNewOrder();
 		UE_LOG(LogTemp, Error, TEXT("Order"));
 	}
 	
@@ -81,9 +79,9 @@ void AChefWithPawsGameMode::FinishGame()
 	UNormalWidget*Widget = Cast<UNormalWidget>(CurrentWidget);
 	check(Widget);
 	Widget->Stop();
-	AOrderList* MyGameState = Cast<AOrderList>(GetWorld()->GetGameState());
-	check(MyGameState);
-	MyGameState->Stop();
+	AOrderList* OrderList = Cast<AOrderList>(GetWorld()->GetGameState());
+	check(OrderList);
+	OrderList->Stop();
 	ChangeMenuWidget(EndingWidgetClass);
 	SetGameplayState(ENomalGameplayState::EFinish);
 }
@@ -140,4 +138,9 @@ void AChefWithPawsGameMode::AddCoin(int32 Number)
 void AChefWithPawsGameMode::MinusCoin(int32 Number)
 {
 	Coin = Coin - Number;
+}
+
+void  AChefWithPawsGameMode::Return()
+{
+	GetWorld()->ServerTravel(FString("/Game/Maps/main"));
 }

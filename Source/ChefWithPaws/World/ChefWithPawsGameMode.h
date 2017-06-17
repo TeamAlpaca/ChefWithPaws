@@ -20,8 +20,8 @@ class AChefWithPawsGameMode : public AGameModeBase
 
 public:
 	AChefWithPawsGameMode();
-	
-	virtual void InitGameState()override;
+	virtual void BeginPlay() override;
+
 	void FinishGame();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
@@ -77,6 +77,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Coin")
 		void MinusCoin(int32 Number);
+
+	UFUNCTION(BlueprintCallable, Category = "Menu")
+		void  Return();
 
 	class AOrderList* OrderList;
 protected:
