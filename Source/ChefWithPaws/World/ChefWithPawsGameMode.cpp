@@ -3,8 +3,10 @@
 #include "ChefWithPaws.h"
 #include "ChefWithPawsGameMode.h"
 #include "ChefWithPawsCharacter.h"
-#include "NormalWidget.h"
+#include "Menu/NormalWidget.h"
+
 #include "OrderList.h"
+
 
 
 
@@ -27,6 +29,9 @@ void  AChefWithPawsGameMode::BeginPlay()
 	ChangeMenuWidget(StartingWidgetClass);
 	AOrderList* OrderList = Cast<AOrderList>(GetWorld()->GetGameState());
 	check(OrderList);
+	UGameplayStatics::CreatePlayer(GetWorld(), 0, true);
+	UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+
 	OrderList->StartGameplayStateMachine();
 	SetGameplayState(ENomalGameplayState::EWaiting);
 }
@@ -40,9 +45,8 @@ int32 AChefWithPawsGameMode::GetCountdownTime() const
 void AChefWithPawsGameMode::StartNow()
 {
 	UE_LOG(LogTemp, Error, TEXT("StartNow"));
-	AChefWithPawsCharacter* Character = Cast<AChefWithPawsCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		Character->SetupPlayerInputComponentNow();
-	CountdownTime = 100;
+	
+	CountdownTime = GameCountdownTime;
 	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &AChefWithPawsGameMode::AdvanceTimer, 1.0f, true);
 	SetGameplayState(ENomalGameplayState::EPlaying);
 
@@ -56,23 +60,46 @@ void AChefWithPawsGameMode::ReturnToMenu()
 
 void AChefWithPawsGameMode::AdvanceTimer()
 {
-	--CountdownTime;
-	if (CountdownTime < 1)
+	if (CountdownTime == GameCountdownTime)
 	{
-		// 倒计时结束，停止运行定时器。
-		GetWorldTimerManager().ClearTimer(CountdownTimerHandle);
-		//在定时器结束时按需要执行特殊操作。
-		FinishGame();
+		CreateNewOrder();
+		--CountdownTime;
 	}
-	if (CountdownTime%5==0)
+	else
 	{
-		AOrderList* OrderList = Cast<AOrderList>(GetWorld()->GetGameState());
-		check(OrderList);
-		OrderList->CreateNewOrder();
-		UE_LOG(LogTemp, Error, TEXT("Order"));
+		--CountdownTime;
+		if (CountdownTime < 1)
+		{
+			// 倒计时结束，停止运行定时器。
+			GetWorldTimerManager().ClearTimer(CountdownTimerHandle);
+			//在定时器结束时按需要执行特殊操作。
+			FinishGame();
+		}
+		else 
+		{
+			if (CountdownTime >= (GameCountdownTime - 45))
+			{
+				if (CountdownTime == GameCountdownTime - 20)
+				{
+					CreateNewOrder();
+				}
+				if (CountdownTime == GameCountdownTime - 35)
+				{
+					CreateNewOrder();
+				}
+				if (CountdownTime == GameCountdownTime - 45)
+				{
+					CreateNewOrder();
+				}
+			}
+			else if (CountdownTime % 5 == 0)
+			{
+				CreateNewOrder();
+			}
+		}
 	}
-	
 }
+
 
 void AChefWithPawsGameMode::FinishGame()
 {
@@ -123,6 +150,14 @@ bool AChefWithPawsGameMode::IsWaiting()
 bool AChefWithPawsGameMode::IsPlaying()
 {
 	return GameplayState == ENomalGameplayState::EPlaying;
+}
+
+void AChefWithPawsGameMode::CreateNewOrder()
+{
+	AOrderList* OrderList = Cast<AOrderList>(GetWorld()->GetGameState());
+	check(OrderList);
+	OrderList->CreateNewOrder();
+	UE_LOG(LogTemp, Error, TEXT("Order"));
 }
 
 int32 AChefWithPawsGameMode::GetCoin() const

@@ -56,22 +56,38 @@ void AChefWithPawsCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 {
 	// Set up gameplay key bindings
 	InputComponent = PlayerInputComponent;
-	
+	check(InputComponent);
+	int32 id = (Cast<APlayerController>(GetController()))->GetLocalPlayer()->GetControllerId();
+	if (id == 0)
+	{
+		InputComponent->BindAxis("MoveForward_P1", this, &AChefWithPawsCharacter::MoveForward);
+		InputComponent->BindAxis("MoveRight_P1", this, &AChefWithPawsCharacter::MoveRight);
+	}
+	else if (id == 1)
+	{
+		InputComponent->BindAxis("MoveForward_P2", this, &AChefWithPawsCharacter::MoveForward);
+		InputComponent->BindAxis("MoveRight_P2", this, &AChefWithPawsCharacter::MoveRight);
+	}
 }
-void AChefWithPawsCharacter::SetupPlayerInputComponentNow()
+void AChefWithPawsCharacter::SetupPlayerInputComponentNow(int32 id)
 {
 	check(InputComponent);
-	UE_LOG(LogGameMode, Warning, TEXT("SetupPlayerInputComponentNow"));
-	InputComponent->BindAxis("MoveForward", this, &AChefWithPawsCharacter::MoveForward);
-	InputComponent->BindAxis("MoveRight", this, &AChefWithPawsCharacter::MoveRight);
-
+	if (id == 0)
+	{
+		InputComponent->BindAxis("MoveForward_P1", this, &AChefWithPawsCharacter::MoveForward);
+		InputComponent->BindAxis("MoveRight_P1", this, &AChefWithPawsCharacter::MoveRight);
+	}
+	else if (id == 1)
+	{
+		InputComponent->BindAxis("MoveForward_P2", this, &AChefWithPawsCharacter::MoveForward);
+		InputComponent->BindAxis("MoveRight_P2", this, &AChefWithPawsCharacter::MoveRight);
+	}
 }
 
 void AChefWithPawsCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
-		UE_LOG(LogGameMode, Warning, TEXT("zou"));
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);

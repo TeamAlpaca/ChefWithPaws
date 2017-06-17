@@ -55,9 +55,15 @@ UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Coin", Meta = (Bluep
 	FTimerHandle CountdownTimerHandle;
 
 private:
+	TSubclassOf<APawn> DefaultPawnClass2;
 	ENomalGameplayState GameplayState;
 
 public:
+
+	APlayerController* PlayerController1;
+	APlayerController* PlayerController2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 GameCountdownTime=240;
 
 	ENomalGameplayState GetGameplayState()const;
 
@@ -68,6 +74,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game State")
 		bool IsPlaying();
 
+	void CreateNewOrder();
 
 	UFUNCTION(BlueprintPure, Category = "Coin")
 		int32 GetCoin()const;

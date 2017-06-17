@@ -22,7 +22,7 @@ public:
     virtual void BeginPlay() override;
 
 	FTimerHandle CountdownTimerHandle;
-	void SetupPlayerInputComponentNow();
+	void SetupPlayerInputComponentNow(int32 id);
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
